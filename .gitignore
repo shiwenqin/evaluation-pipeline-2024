@@ -1,6 +1,7 @@
 env
 *.pyc
 output/
+outputs/
 data/
 lm_cache
 .idea
