@@ -121,7 +121,7 @@ def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
             optim="adamw_torch",
             metric_for_best_model=metric_to_track,
             warmup_steps=(task_cfg.warmup_proportion * len(dataset["train"]) * task_cfg.num_epochs),
-            load_best_model_at_end=True,
+            #load_best_model_at_end=True,
         )
     )
 
