@@ -1,11 +1,10 @@
 # This script was adapted from `LoRA.ipynb` in the HuggingFace PEFT repository:
 # https://github.com/huggingface/peft/blob/main/examples/sequence_classification/LoRA.ipynb
-import argparse
-import os
 import numpy as np
 from copy import deepcopy
 
 import torch
+import wandb
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 
@@ -14,15 +13,10 @@ import hydra
 from datasets import load_dataset
 from transformers import (
     AutoModelForSequenceClassification, AutoTokenizer,
-    get_linear_schedule_with_warmup, set_seed
 )
 from peft import (
-    get_peft_config,
     get_peft_model,
-    get_peft_model_state_dict,
-    set_peft_model_state_dict,
     LoraConfig,
-    PeftType
 )
 from tqdm import tqdm
 from transformers import Trainer, TrainingArguments
@@ -42,9 +36,7 @@ def tokenize_fn(examples, tokenizer, input_columns=["sentence"], max_length=128)
                          truncation=True, max_length=max_length)
     else:
         raise ValueError(f"Bad number of input_columns: {len(input_columns)}")
-    
-# def collate_fn(examples):
-#     return tokenizer.pad(examples, padding="longest", return_tensors="pt")
+
 
 def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
     
@@ -134,6 +126,12 @@ def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
 @hydra.main(version_base=None, config_path="configs", config_name="glue")
 def main(cfg):
 
+    # wandb.init(
+    #     project=cfg.project,
+    #     id = cfg.model_id,
+    #     resume = "must"
+    # )
+
     peft_config = LoraConfig(task_type="SEQ_CLS", inference_mode=False, r=8, lora_alpha=16, lora_dropout=0.1, modules_to_save=["classifier"])
 
     # load tokenizer and preprocess dataset 
@@ -142,7 +140,6 @@ def main(cfg):
     for task_name, task_cfg in cfg.tasks.items():
         metrics = train_task(task_name, task_cfg, tokenizer, peft_config, cfg)
         print(f"Task: {task_name}, Metrics: {metrics}")
-
 
 if __name__ == "__main__":
     main()
