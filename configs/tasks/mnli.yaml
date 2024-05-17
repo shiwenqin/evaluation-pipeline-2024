@@ -1,6 +1,6 @@
 mnli:
   collection: glue
-  structure: [question, sentence]
+  structure: [premise, hypothesis]
 
   batch_size: 64
   num_epochs: 32
