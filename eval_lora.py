@@ -43,8 +43,8 @@ def tokenize_fn(examples, tokenizer, input_columns=["sentence"], max_length=128)
     else:
         raise ValueError(f"Bad number of input_columns: {len(input_columns)}")
     
-def collate_fn(examples):
-    return tokenizer.pad(examples, padding="longest", return_tensors="pt")
+# def collate_fn(examples):
+#     return tokenizer.pad(examples, padding="longest", return_tensors="pt")
 
 def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
     
@@ -108,7 +108,9 @@ def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
         compute_metrics=compute_metrics,
         train_dataset=tokenized_dataset["train"],
         eval_dataset=eval_dataset,
-        data_collator=collate_fn,
+        data_collator=lambda x: (
+            tokenizer.pad(x, padding="longest", return_tensors="pt")
+        ),
         args=TrainingArguments(
             output_dir=cfg.output_dir,
             num_train_epochs=task_cfg.num_epochs,
