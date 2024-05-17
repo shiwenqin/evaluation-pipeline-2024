@@ -129,7 +129,7 @@ def train_task(task_name, task_cfg, tokenizer, peft_config, cfg):
     metrics = trainer.evaluate(eval_dataset)
     return metrics
 
-@hydra.main(version_base=None, config_path="config", config_name="glue")
+@hydra.main(version_base=None, config_path="configs", config_name="glue")
 def main(cfg):
 
     peft_config = LoraConfig(task_type="SEQ_CLS", inference_mode=False, r=8, lora_alpha=16, lora_dropout=0.1, modules_to_save=["classifier"])
