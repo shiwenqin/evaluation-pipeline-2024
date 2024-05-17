@@ -1,0 +1,9 @@
+boolq:
+  collection: super_glue
+  structure: [question, passage]
+
+  batch_size: 64
+  num_epochs: 32
+  max_length: 128
+  lr: 3e-4
+  warmup_proportion: 0.06

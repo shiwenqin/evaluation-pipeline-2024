@@ -1,0 +1,18 @@
+defaults:
+  - tasks:
+      - boolq
+      - cola
+      - mnli
+      - mrpc
+      - multirc
+      - qnli
+      - qqp
+      - rte
+      - sst2
+      - wsc
+
+model_id: 0xi2hyeh
+model_name: gpt2_wee
+model_path: /localdisk/home/s2618109/Work/Models/babylm/${model_name}_${model_id}
+padding_side: right
+output_dir: results/${model_name}_${model_id}
